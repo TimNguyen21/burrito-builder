@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setOrders } from '../../actions';
-import { getOrders } from '../../apiCalls';
+import { setOrders, removeOrder } from '../../actions';
+import { getOrders} from '../../apiCalls';
 
 import './Orders.css';
 
@@ -13,10 +13,15 @@ class Orders extends Component {
       .catch(err => console.error('Error fetching:', err));
   }
 
-  deleteOrder = (id) => {
-    fetch("http://localhost:3001/api/v1/orders/" + id, {
+  deleteOrder = (e) => {
+    const currentOrderID = parseInt(e.target.id)
+    const updatedOrder = this.props.orders.filter(order => order.id !== currentOrderID)
+
+    fetch("http://localhost:3001/api/v1/orders/" + currentOrderID, {
       method: "DELETE"
     })
+      .then(() => this.props.updateOrders(updatedOrder))
+      .catch(err => console.log(err.message))
   }
 
   orderEls = () => {
@@ -29,7 +34,7 @@ class Orders extends Component {
           return <li>{ingredient}</li>
         })}
         </ul>
-        <button>Remove Order</button>
+        <button id={order.id} onClick={this.deleteOrder}>Remove Order</button>
         </article>
       )
     });
@@ -50,7 +55,8 @@ const mapStateToProps = ({ orders }) => ({
 
 const mapDispatchToProps = dispatch => (
   {
-    setOrders: (orders) => dispatch(setOrders(orders))
+    setOrders: (orders) => dispatch(setOrders(orders)),
+    updateOrders: (orders) => dispatch(removeOrder(orders))
   }
 );
 
