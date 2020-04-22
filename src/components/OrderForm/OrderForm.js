@@ -75,10 +75,6 @@ class OrderForm extends Component {
   }
 }
 
-// const mapStateToProps = ({ orders }) => ({
-//   orders
-// });
-
 const mapDispatchToProps = dispatch => (
   {
     addOrder: (order) => dispatch(addOrder(order))

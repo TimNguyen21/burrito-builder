@@ -13,6 +13,12 @@ class Orders extends Component {
       .catch(err => console.error('Error fetching:', err));
   }
 
+  deleteOrder = (id) => {
+    fetch("http://localhost:3001/api/v1/orders/" + id, {
+      method: "DELETE"
+    })
+  }
+
   orderEls = () => {
     return this.props.orders.map(order => {
       return (
@@ -23,6 +29,7 @@ class Orders extends Component {
           return <li>{ingredient}</li>
         })}
         </ul>
+        <button>Remove Order</button>
         </article>
       )
     });
