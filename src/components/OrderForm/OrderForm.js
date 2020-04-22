@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { addOrder } from '../../actions';
 import { connect } from 'react-redux';
+import { updateOrder } from '../../apiCalls';
 
 class OrderForm extends Component {
   constructor(props) {
@@ -35,7 +36,10 @@ class OrderForm extends Component {
     if(this.state.ingredients.length === 0) {
       alert("please add ingredient(s)")
     } else {
-      this.props.addOrder({id: Date.now(), name: this.state.name, ingredients: this.state.ingredients})
+      updateOrder(this.state.name, this.state.ingredients)
+        .then(response => response.json())
+        .then(data => this.props.addOrder(data))
+        .catch(err => console.log(err.message))
     }
   }
 
